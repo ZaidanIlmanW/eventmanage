@@ -13,22 +13,22 @@ class ParticipantController extends Controller
     public function store(Request $request, Event $event)
     {
         // Pastikan event berkategori seminar
-        if ($event->category !== 'Seminar') {
+        if ($events->category !== 'Seminar') {
             return redirect()->back()->with('error', 'Hanya bisa mendaftar pada event seminar.');
         }
 
         // Validasi data
         $request->validate([
-            'name' => 'required|string|max:255',
-            'class' => 'required|string|max:255',
+            'nama' => 'required|string|max:255',
+            'kelas' => 'required|string|max:255',
             'email' => 'required|email|unique:participants,email',
             'phone' => 'required|string|max:15',
         ]);
 
         // Simpan data peserta
         Participant::create([
-            'name' => $request->name,
-            'class' => $request->class,
+            'nama' => $request->nama,
+            'kelas' => $request->kelas,
             'email' => $request->email,
             'phone' => $request->phone,
             'event_id' => $event->id,
@@ -37,5 +37,5 @@ class ParticipantController extends Controller
         return redirect()->back()->with('success', 'Pendaftaran berhasil.');
     }
 
-    
+
 }

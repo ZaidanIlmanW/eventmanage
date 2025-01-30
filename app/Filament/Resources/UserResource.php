@@ -24,20 +24,18 @@ class UserResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    public static function canViewAny(): bool
+    {
+        $user = auth()->user();
+        
+        return $user && ($user->hasRole('admin'));
+    }
+
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Select::make('roles')
-                ->relationship('roles', 'name') // Menampilkan nama peran
-                ->saveRelationshipsUsing(function (Model $record, $state) {
-                    $record->roles()->syncWithPivotValues($state, [
-                        config('permission.column_names.team_foreign_key') => getPermissionsTeamId()
-                    ]);
-                })
-                ->multiple() // Mengizinkan pemilihan beberapa peran
-                ->preload()  // Preload data peran
-                ->searchable(), // Menambahkan fungsionalitas pencarian
+           
             ]);
     }
 
